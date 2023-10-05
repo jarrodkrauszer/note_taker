@@ -14,6 +14,9 @@ app.use(express.json());
 //   res.sendFile(path.join(__dirname, './public/index.html'));
 // });
 
+
+
+
 app.get('/notes', (req, res) => {
   res.sendFile(path.join(__dirname, './public/notes.html'));
 });
@@ -40,12 +43,14 @@ app.post('/api/notes', (req, res) => {
 app.delete('/api/notes/:id', (req, res) => {
   const notes = getData();
   const id = req.params.id;
-  const deleteItem = notes.find(note => note.id === id);
 
+  // CAN THESE BE
+  const deleteItem = notes.find(note => note.id === id);
   const newNotes = notes.filter(note => note.id !== deleteItem.id)
+  // const newNotes = notes.filter(note => note.id !== notes.find(note => note.id === id)?.id)
 
   writeData(newNotes);
-  
+
   res.json({  message: 'DB updated successfully!' })
 
 });
