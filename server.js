@@ -10,9 +10,6 @@ const PORT = process.env.PORT || 3333;
 app.use(express.static('public'));
 app.use(express.json());
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, './public/index.html'));
-// });
 
 app.get('/notes', (req, res) => {
   res.sendFile(path.join(__dirname, './public/notes.html'));
@@ -25,13 +22,13 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/notes', (req, res) => {
   const notes = getData();
-
+  
   const newNote = {
     id: uuidv4(),
     title: req.body.title,
     text: req.body.text
   }
-
+  
   notes.push(newNote);
   writeData(notes);
   res.json({ message: 'DB updated successfully!' });
@@ -40,18 +37,19 @@ app.post('/api/notes', (req, res) => {
 app.delete('/api/notes/:id', (req, res) => {
   const notes = getData();
   const id = req.params.id;
-
-  // CAN THESE BE
-  const deleteItem = notes.find(note => note.id === id);
-  const newNotes = notes.filter(note => note.id !== deleteItem.id)
-  // const newNotes = notes.filter(note => note.id !== notes.find(note => note.id === id)?.id)
-
+  
+  const newNotes = notes.filter(note => note.id !== id);
+  
   writeData(newNotes);
-
+  
   res.json({  message: 'DB updated successfully!' })
+  
+});
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 app.listen(PORT, () =>
-  console.info(`Example app listening at http://localhost:${PORT}`)
+console.info(`Example app listening at http://localhost:${PORT}`)
 );
